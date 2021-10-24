@@ -5,6 +5,7 @@ const expect = require("chai");
 const socket = require("socket.io");
 const http = require("http");
 const nocache = require("nocache");
+const nanoid = require("nanoid").nanoid;
 
 const fccTestingRoutes = require("./routes/fcctesting.js");
 const runner = require("./test-runner.js");
@@ -21,6 +22,7 @@ const server = http.createServer(app);
 const io = socket(server);
 
 // Helmet setup
+const helmet = require("helmet");
 app.use(
   helmet({
     noSniff: true,
