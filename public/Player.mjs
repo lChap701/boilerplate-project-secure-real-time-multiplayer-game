@@ -20,17 +20,33 @@ class Player {
   movePlayer(dir, speed) {}
 
   /**
-   * Allows the player to collect items
-   * @param item    Represents the item that should be collected
-   *
+   * Allows the player to collect items and allows boundries to be set
+   * @param item    Represents the item that the player touched
+   * @returns       Returns a boolean value to indicate if the item was collected
    */
-  collision(item) {}
+  collision(item) {
+    // some condition
+    this.score += item.value;
+    return true;
+  }
 
   /**
    * Calculates the player's rank
    * @param arr     Represents the all players currently playing the game
+   * @returns       Returns the rank of the player
    */
-  calculateRank(arr) {}
+  calculateRank(arr) {
+    let players = arr.filter((player) => player.id != this.id);
+    let rank = 1;
+
+    players.forEach((player) => {
+      if (this.score < player.score) {
+        rank++;
+      }
+    });
+
+    return `Rank: ${rank} / ${arr.length}`;
+  }
 }
 
 export default Player;
