@@ -19,6 +19,17 @@ const app = express();
 const server = http.createServer(app);
 const io = socket(server);
 
+// Helmet setup
+app.use(
+  helmet({
+    noSniff: true,
+    xssFilter: true,
+    hidePoweredBy: {
+      setTo: "PHP 7.4.3",
+    },
+  })
+);
+
 app.use("/public", express.static(process.cwd() + "/public"));
 app.use("/assets", express.static(process.cwd() + "/assets"));
 
