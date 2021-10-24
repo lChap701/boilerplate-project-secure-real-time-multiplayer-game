@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const expect = require("chai");
 const socket = require("socket.io");
 const http = require("http");
+const nocache = require("nocache");
 
 const fccTestingRoutes = require("./routes/fcctesting.js");
 const runner = require("./test-runner.js");
@@ -29,6 +30,9 @@ app.use(
     },
   })
 );
+
+// Prevents caching
+app.use(nocache());
 
 app.use("/public", express.static(process.cwd() + "/public"));
 app.use("/assets", express.static(process.cwd() + "/assets"));
