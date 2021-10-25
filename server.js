@@ -2,10 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const expect = require("chai");
+const nanoid = require("nanoid").nanoid;
 
 const fccTestingRoutes = require("./routes/fcctesting.js");
 const runner = require("./test-runner.js");
-import Collectible from "./public/Collectible.mjs";
+
+const Collectible = require("./public/Collectible.mjs");
+const gameConfig = require("./public/gameConfig.mjs");
+const startPos = require("./public/utils/startPos.mjs");
 
 /**
  * Module that contains the entire application
@@ -53,30 +57,34 @@ app.use(function (req, res, next) {
   res.status(404).type("text").send("Not Found");
 });
 
-// Adds an item
-const item = new Collectible({
-  /*x: x 
-  y: y
-  value: value*/
-  id: nanoid(),
-});
-
 // Array containing all players
 let players = [];
 
 // Creates listeners for all sockets
 io.on("connection", (socket) => {
-  // Adds players, opponents, and items to the game
+  // Adds players and items to the game
   socket.on("joinGame", (player) => {
     players.push(player);
 
-    // Adds an opponent
-    socket.emit("addOpponent", (opponent) => {
-      players.push(opponent);
+    // Initializes the game
+    let collectible = gameConfig.selectCollectible;
+    let pos = startPos(gameConfig.gameSize, collectible);
+    socket.emit("init", {
+      players: players,
+      collectible: new Collectible({
+        x: pos.x,
+        y: pos.y,
+        src: collectible.src,
+        value: collectible.points,
+        id: nanoid(),
+      }),
     });
 
-    // Adds an items
-    socket.emit("addItem", item);
+    // Adds an opponent (for everyone but the sender)
+    socket.on("addOpponent", (opponent) => {
+      players.push(opponent);
+      socket.broadcast.emit("updatedPlayersList", { players: players });
+    });
   });
 });
 
