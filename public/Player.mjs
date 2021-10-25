@@ -1,3 +1,8 @@
+import gameConfig from "./gameConfig.mjs";
+
+const gameOffsetTop = gameConfig.infoHeight;
+const gameOffsetLeft = gameConfig.padding;
+
 /**
  * Module for creating player objects and keeping track of them
  * @module ./public/Player
@@ -46,6 +51,19 @@ class Player {
     });
 
     return `Rank: ${rank} / ${arr.length}`;
+  }
+
+  /**
+   * Draws the player on the canvas
+   * @param context     Used to render 2D objects on the canvas
+   * @param sprites     Represents an array of item sprites
+   *
+   */
+  draw(context, sprites) {
+    const x = this.x + gameOffsetLeft;
+    const y = this.y + gameOffsetTop;
+    const image = sprites.find((sprite) => sprite.src == this.src);
+    context.drawImage(image.src, x, y, image.width, image.height);
   }
 }
 

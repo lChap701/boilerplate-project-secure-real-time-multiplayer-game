@@ -58,19 +58,29 @@ app.use(function (req, res, next) {
 });
 
 // Array containing all players
-let players = [];
+let connectedPlayers = [];
 
 // Creates listeners for all sockets
 io.on("connection", (socket) => {
+  // Removes the player who left the game from the connectedPlayers
+  socket.on("disconnect", () => {
+    connectedPlayers = connectedPlayers.filter(
+      (player) => player.id !== socket.id
+    );
+    socket.broadcast.emit("updatedPlayerList", { players: connectedPlayers });
+    console.log("A player left the game");
+  });
+
   // Adds players and items to the game
   socket.on("joinGame", (player) => {
-    players.push(player);
+    connectedPlayers.push(player);
+    console.log("A new player joined the game");
 
     // Initializes the game
     let collectible = gameConfig.selectCollectible;
     let pos = startPos(gameConfig.gameSize, collectible);
     socket.emit("init", {
-      players: players,
+      players: connectedPlayers,
       collectible: new Collectible({
         x: pos.x,
         y: pos.y,
@@ -81,9 +91,10 @@ io.on("connection", (socket) => {
     });
 
     // Adds an opponent (for everyone but the sender)
-    socket.on("addOpponent", (opponent) => {
-      players.push(opponent);
-      socket.broadcast.emit("updatedPlayersList", { players: players });
+    socket.on("requestPlayerList", () => {
+      socket.broadcast.emit("updatedPlayerList", {
+        players: connectedPlayers,
+      });
     });
   });
 });
