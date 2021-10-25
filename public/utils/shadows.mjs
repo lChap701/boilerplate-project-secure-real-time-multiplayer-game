@@ -2,7 +2,7 @@
  * Module that adds shadows to all sprites
  * @module ./public/utils/shadows
  *
- * @param context     Represents the sprites on the canvas
+ * @param context     Represents the sprites ono the canvas
  *
  */
 export default function shadows(context) {
