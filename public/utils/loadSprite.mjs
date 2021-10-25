@@ -2,12 +2,14 @@
  * Pre-loads sprites
  * @module ./public/utils/loadSprite
  *
- * @param src   Represents the location of the sprite
+ * @param width     Represents the desired width
+ * @param height    Represents the desired height
+ * @param src       Represents the location of the sprite
  *
  * @returns     Returns the sprite
  */
-const loadSprite = (src) => {
-  const sprite = new Image();
+const loadSprite = (width, height, src) => {
+  const sprite = new Image(width, height);
   sprite.src = src;
   return sprite;
 };
