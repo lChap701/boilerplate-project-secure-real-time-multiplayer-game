@@ -4,7 +4,7 @@
  *
  */
 class Player {
-  constructor({ x, y, score, id }) {
+  constructor({ x, y, score = 0, id }) {
     this.x = x;
     this.y = y;
     this.score = score;
