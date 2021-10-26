@@ -7,7 +7,7 @@
  */
 export default function shadows(context) {
   context.shadowColor = "rgba(0, 0, 0, 0.8)";
-  context.shadowBlur = 10;
+  context.shadowBlur = 5;
   context.shadowOffsetX = 0;
   context.shadowOffsetY = 0;
 }
