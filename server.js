@@ -61,9 +61,9 @@ app.use(function (req, res, next) {
 let connectedPlayers = [];
 
 // Gets a collectible
-let collectible = gameConfig.selectCollectible;
-let pos = startPos(gameConfig.gameSize, collectible);
-let item = new Collectible({
+const collectible = gameConfig.selectCollectible;
+const pos = startPos(gameConfig.gameSize, collectible);
+const item = new Collectible({
   x: pos.x,
   y: pos.y,
   src: collectible.src,
@@ -110,6 +110,8 @@ io.on("connection", (socket) => {
     });
 
     socket.on("movePlayer", (player) => {});
+
+    socket.on("playerCollideWithCollectible", (player) => {});
   });
 });
 
