@@ -5,10 +5,9 @@
  */
 const gameConfig = {
   title: "Dog Days",
-  instructions: "Collect as many sticks, bones, and tennis balls as you can!!",
   controls: "WASD or arrow keys",
-  gameWidth: 800, // will change later
-  gameHeight: 500,
+  gameWidth: 1000, 
+  gameHeight: 490,
   padding: 10,
   infoHeight: 80,
   get gameSize() {
