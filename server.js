@@ -60,14 +60,25 @@ app.use(function (req, res, next) {
 // Array containing all players
 let connectedPlayers = [];
 
+// Gets a collectible
+let collectible = gameConfig.selectCollectible;
+let pos = startPos(gameConfig.gameSize, collectible);
+let item = new Collectible({
+  x: pos.x,
+  y: pos.y,
+  src: collectible.src,
+  value: collectible.points,
+  id: nanoid(),
+});
+
 // Creates listeners for all sockets
 io.on("connection", (socket) => {
-  // Removes the player who left the game from the connectedPlayers
+  // Removes the player who left the game from the list of players
   socket.on("disconnect", () => {
     connectedPlayers = connectedPlayers.filter(
       (player) => player.id !== socket.id
     );
-    socket.broadcast.emit("updatedPlayerList", { players: connectedPlayers });
+    socket.broadcast.emit("opponentLeft", socket.id);
     console.log("A player left the game");
   });
 
@@ -76,26 +87,29 @@ io.on("connection", (socket) => {
     connectedPlayers.push(player);
     console.log("A new player joined the game");
 
-    // Initializes the game
-    let collectible = gameConfig.selectCollectible;
-    let pos = startPos(gameConfig.gameSize, collectible);
-    socket.emit("init", {
-      players: connectedPlayers,
-      collectible: new Collectible({
-        x: pos.x,
-        y: pos.y,
-        src: collectible.src,
-        value: collectible.points,
-        id: nanoid(),
-      }),
+    // Sets up the collectible
+    socket.emit("setCollectible", item);
+
+    // Adds opponents to the game
+    socket.emit("getOpponents", connectedPlayers);
+    socket.broadcast.emit("getOpponents", connectedPlayers);
+
+    // Updates the current player's score in the player array
+    socket.on("scored", (player) => {
+      let index = connectedPlayers.findIndex((p) => p.id == player.id);
+      connectedPlayers[index].score = player.score;
+      socket.emit("getRank", connectedPlayers);
+      socket.broadcast.emit("getRank", connectedPlayers);
     });
 
-    // Adds an opponent (for everyone but the sender)
-    socket.on("requestPlayerList", () => {
-      socket.broadcast.emit("updatedPlayerList", {
-        players: connectedPlayers,
-      });
+    // Sends the correct rank to the client
+    socket.on("requestRank", () => {
+      console.log(connectedPlayers.length);
+      socket.emit("getRank", connectedPlayers);
+      socket.broadcast.emit("getRank", connectedPlayers);
     });
+
+    socket.on("movePlayer", (player) => {});
   });
 });
 
