@@ -26,8 +26,8 @@ class Collectible {
   draw(context, sprites) {
     const x = this.x + gameOffsetLeft;
     const y = this.y + gameOffsetTop;
-    const image = sprites.find((sprite) => sprite.src == this.src);
-    context.drawImage(image.src, x, y, image.width, image.height);
+    const image = sprites.find((sprite) => sprite.src.includes(this.src));
+    context.drawImage(image, x, y, image.width, image.height);
   }
 }
 

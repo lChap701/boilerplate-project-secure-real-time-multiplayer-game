@@ -1,5 +1,6 @@
 import gameConfig from "./gameConfig.mjs";
 
+const { gameSize, playerSprites } = gameConfig;
 const gameOffsetTop = gameConfig.infoHeight;
 const gameOffsetLeft = gameConfig.padding;
 
@@ -14,6 +15,8 @@ class Player {
     this.y = y;
     this.score = score;
     this.id = id;
+    this.speed = 4;
+    this.dir = null;
   }
 
   /**
@@ -22,7 +25,27 @@ class Player {
    * @param speed   Represents the speed that they are moving at
    *
    */
-  movePlayer(dir, speed) {}
+  movePlayer(dir, speed) {
+    switch (dir) {
+      case "up":
+        this.y -= this.y - speed < 0 ? 0 : speed;
+        break;
+      case "down":
+        this.y +=
+          this.y + speed < gameSize.height - playerSprites.height
+            ? gameSize.height - playerSprites.height
+            : speed;
+        break;
+      case "left":
+        this.x -= this.x - speed < 0 ? 0 : speed;
+        break;
+      case "right":
+        this.x +=
+          this.x + speed < gameSize.width - playerSprites.width
+            ? gameSize.width - playerSprites.width
+            : speed;
+    }
+  }
 
   /**
    * Allows the player to collect items and allows boundries to be set
@@ -56,14 +79,13 @@ class Player {
   /**
    * Draws the player on the canvas
    * @param context     Used to render 2D objects on the canvas
-   * @param sprites     Represents an array of item sprites
+   * @param sprite      Represents the player sprie
    *
    */
-  draw(context, sprites) {
+  draw(context, sprite) {
     const x = this.x + gameOffsetLeft;
     const y = this.y + gameOffsetTop;
-    const image = sprites.find((sprite) => sprite.src == this.src);
-    context.drawImage(image.src, x, y, image.width, image.height);
+    context.drawImage(sprite, x, y, sprite.width, sprite.height);
   }
 }
 
