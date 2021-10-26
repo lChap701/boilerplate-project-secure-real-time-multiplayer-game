@@ -53,9 +53,7 @@ class Player {
    * @returns       Returns a boolean value to indicate if the item was collected
    */
   collision(item) {
-    // some condition
-    this.score += item.value;
-    return true;
+    return this.x == item.x && this.y == item.y;
   }
 
   /**
