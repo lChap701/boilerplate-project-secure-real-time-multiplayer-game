@@ -32,7 +32,7 @@ class Player {
         break;
       case "down":
         this.y +=
-          this.y + speed < gameSize.height - playerSprites.height
+          this.y + speed > gameSize.height - playerSprites.height
             ? gameSize.height - playerSprites.height
             : speed;
         break;
@@ -41,7 +41,7 @@ class Player {
         break;
       case "right":
         this.x +=
-          this.x + speed < gameSize.width - playerSprites.width
+          this.x + speed > gameSize.width - playerSprites.width
             ? gameSize.width - playerSprites.width
             : speed;
     }
