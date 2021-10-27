@@ -15,7 +15,7 @@ export default function drawUI(ctx, playerRank) {
   // Info border
   ctx.beginPath();
   ctx.rect(padding, infoHeight, gameSize.width, gameSize.height);
-  ctx.strokeStyle = "#a8a8ac";
+  ctx.strokeStyle = "#020702";
   ctx.stroke();
   ctx.closePath();
 
@@ -26,7 +26,7 @@ export default function drawUI(ctx, playerRank) {
   ctx.fillStyle = "#ffffff";
   ctx.font = `13px 'Press Start 2P'`;
   ctx.textAlign = "start";
-  ctx.fillText("Controls: " + controls, padding, infoTextPosY);
+  ctx.fillText(controls, padding, infoTextPosY);
 
   // Game title
   ctx.font = `15px 'Press Start 2P'`;

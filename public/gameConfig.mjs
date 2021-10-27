@@ -5,9 +5,9 @@
  */
 const gameConfig = {
   title: "Dog Days",
-  controls: "WASD or arrow keys",
+  controls: "Controls: WASD or arrow keys",
   gameWidth: 952,
-  gameHeight: 492,
+  gameHeight: 488,
   padding: 10,
   infoHeight: 40,
   get gameSize() {
