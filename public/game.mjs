@@ -85,9 +85,6 @@ document.addEventListener("keydown", ({ key }) => {
     case "d":
     case "ArrowRight":
       player.dir = "right";
-      break;
-    default:
-      player.dir = null;
   }
 
   socket.emit("movePlayer", player);
@@ -99,11 +96,11 @@ document.addEventListener("keyup", ({ key }) => {
     player &&
     (key == "w" ||
       key == "ArrowUp" ||
-      key === "s" ||
+      key == "s" ||
       key == "ArrowDown" ||
-      key === "a" ||
+      key == "a" ||
       key == "ArrowLeft" ||
-      key === "d" ||
+      key == "d" ||
       key == "ArrowRight")
   ) {
     player.dir = null;
@@ -131,6 +128,7 @@ socket.on("updateScore", (score) => {
  */
 function renderGame() {
   canvas.style.background = "#080";
+  canvas.style.border = "3px solid #005500";
   context.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draws game UI
