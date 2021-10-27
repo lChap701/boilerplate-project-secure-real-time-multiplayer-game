@@ -60,9 +60,9 @@ app.use(function (req, res, next) {
 // Array containing all players
 let connectedPlayers = [];
 
-// Gets a collectible
+// Sets up the collectible
 let collectible = gameConfig.selectCollectible;
-let pos = startPos(gameConfig.gameSize, collectible);
+const pos = startPos(gameConfig.gameSize, collectible);
 let item = new Collectible({
   x: pos.x,
   y: pos.y,
@@ -73,7 +73,7 @@ let item = new Collectible({
 
 // Creates listeners for all sockets
 io.on("connection", (socket) => {
-  // Removes the player who left the game from the list of players
+  // Removes the player who left the game from the array of players
   socket.on("disconnect", () => {
     connectedPlayers = connectedPlayers.filter(
       (player) => player.id !== socket.id
@@ -87,18 +87,16 @@ io.on("connection", (socket) => {
     connectedPlayers.push(player);
     console.log("A new player joined the game");
 
-    // Sets up the collectible
+    // Send collectible to client
     socket.emit("setCollectible", item);
 
     // Adds opponents to the game
-    socket.emit("getOpponents", connectedPlayers);
-    socket.broadcast.emit("getOpponents", connectedPlayers);
+    io.sockets.emit("getOpponents", connectedPlayers);
 
-    // Sends the correct rank to the client
+    // Sends the correct rank to all clients
     socket.on("requestRank", () => {
       console.log(connectedPlayers.length);
-      socket.emit("getRank", connectedPlayers);
-      socket.broadcast.emit("getRank", connectedPlayers);
+      io.sockets.emit("getRank", connectedPlayers);
     });
 
     // Moves the player across all sockets
@@ -110,16 +108,38 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("updateOpponent", player);
     });
 
+    // Updates the players score and creates a new collectible
     socket.on("playerCollideWithCollectible", () => {
       socket.emit("updateScore", item.value);
+
+      // Get a new collectible sprite
+      collectible = gameConfig.selectCollectible;
+      while (collectible.src == item.src) {
+        collectible = gameConfig.selectCollectible;
+      }
+
+      // Get a new starting position
+      let newPos = startPos(gameConfig.gameSize, collectible);
+      while (newPos.x == item.x && newPos.y == item.y) {
+        newPos = startPos(gameConfig.gameSize, collectible);
+      }
+
+      // Send collectible to all clients
+      item = new Collectible({
+        x: newPos.x,
+        y: newPos.y,
+        src: collectible.src,
+        value: collectible.points,
+        id: nanoid(),
+      });
+      io.sockets.emit("setCollectible", item);
     });
 
-    // Updates the current player's score in the player array
+    // Updates a player's score for all clients
     socket.on("scored", (player) => {
       let index = connectedPlayers.findIndex((p) => p.id == player.id);
       connectedPlayers[index].score = player.score;
-      socket.emit("getRank", connectedPlayers);
-      socket.broadcast.emit("getRank", connectedPlayers);
+      io.sockets.emit("getRank", connectedPlayers);
       socket.broadcast.emit("updateOpponent", player);
     });
   });
