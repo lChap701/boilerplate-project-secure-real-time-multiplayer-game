@@ -61,6 +61,7 @@ socket.on("getRank", (players) => {
   playerRank = player.calculateRank(players);
 });
 
+/* Updates the opponents array when an opponent leaves the game */
 socket.on("opponentLeft", (id) => {
   opponents = opponents.filter((opponent) => opponent.id !== id);
   socket.emit("requestRank");
@@ -93,7 +94,7 @@ document.addEventListener("keydown", ({ key }) => {
   socket.emit("movePlayer", player);
 });
 
-/* Stops player from moving */
+/* Stops the player from moving */
 document.addEventListener("keyup", ({ key }) => {
   if (player && (key === "w" || key === "s" || key === "a" || key === "d")) {
     player.dir = null;
@@ -101,6 +102,7 @@ document.addEventListener("keyup", ({ key }) => {
   }
 });
 
+/* Updates the array of opponents when changes to an opponent occur */
 socket.on("updateOpponent", (opponent) => {
   let index = opponents.findIndex((op) => op.id == opponent.id);
   opponents[index].dir = opponent.dir;
@@ -109,6 +111,7 @@ socket.on("updateOpponent", (opponent) => {
   opponents[index].score = opponent.score;
 });
 
+/* Upates the player score */
 socket.on("updateScore", (score) => {
   player.score = score;
   socket.emit("scored", player);
