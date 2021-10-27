@@ -1,6 +1,6 @@
 import gameConfig from "./gameConfig.mjs";
 
-const { gameSize, playerSprites } = gameConfig;
+const { gameSize, playerSprites, collectibleSprites } = gameConfig;
 const gameOffsetTop = gameConfig.infoHeight;
 const gameOffsetLeft = gameConfig.padding;
 
@@ -57,7 +57,53 @@ class Player {
    * @returns       Returns a boolean value to indicate if the item was collected
    */
   collision(item) {
-    return this.x == item.x && this.y == item.y;
+    let itemWidth;
+    let itemHeight;
+
+    Object.keys(collectibleSprites).forEach((key) => {
+      if (collectibleSprites[key].src == item.src) {
+        itemWidth = collectibleSprites[key].width;
+        itemHeight = collectibleSprites[key].height;
+      }
+    });
+
+    if (this.x == item.x && this.y == item.y) return true;
+
+    // Contains all sides (from top left to bottom right) of the avatar
+    const avatarSides = {
+      left: {
+        x: this.x,
+        y: this.y,
+      },
+      right: {
+        x: this.x + playerSprites.width,
+        y: this.y + playerSprites.height,
+      },
+    };
+
+    // Contains all sides (from top left to bottom right) of the collectible sprite
+    const itemSides = {
+      left: {
+        x: item.x,
+        y: item.y,
+      },
+      right: {
+        x: item.x + itemWidth,
+        y: item.y + itemHeight,
+      },
+    };
+
+    // Checks if the player sprite intersected with the item
+    if (
+      avatarSides.left.x < itemSides.right.x &&
+      itemSides.left.x < avatarSides.right.x &&
+      avatarSides.right.y > itemSides.left.y &&
+      itemSides.right.y > avatarSides.left.y
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
