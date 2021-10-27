@@ -141,6 +141,13 @@ io.on("connection", (socket) => {
       connectedPlayers[index].score = player.score;
       io.sockets.emit("getRank", connectedPlayers);
       socket.broadcast.emit("updateOpponent", player);
+      console.log(player.score);
+
+      // Ends the game once a player has a score of at least 500 points
+      if (player.score >= 500) {
+        socket.emit("winner");
+        socket.broadcast.emit("loser");
+      }
     });
   });
 });

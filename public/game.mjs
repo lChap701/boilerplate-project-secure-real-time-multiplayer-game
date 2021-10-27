@@ -16,6 +16,7 @@ let curCollectible;
 let playerRank = "Rank: 0 / 0";
 let opponents = [];
 let emitCollision = true;
+let endGame;
 
 /* Sets the size of the canvas */
 canvas.width = gameConfig.gameWidth;
@@ -123,6 +124,12 @@ socket.on("updateScore", (score) => {
   socket.emit("scored", player);
 });
 
+/* Ends the game and shows the player that they won */
+socket.on("winner", () => (endGame = "win"));
+
+/* Ends the game and shows the player that they lost */
+socket.on("loser", () => (endGame = "lose"));
+
 /**
  * Draws sprites and creates the canavas for the ame
  */
@@ -135,7 +142,7 @@ function renderGame() {
   drawUI(context, playerRank);
 
   // Draws collectible
-  if (curCollectible) curCollectible.draw(context, itemSprites);
+  if (curCollectible && !endGame) curCollectible.draw(context, itemSprites);
 
   // Draws player's avatar
   if (player) player.draw(context, playerAvatars[0]);
@@ -159,7 +166,28 @@ function renderGame() {
     emitCollision = false;
   }
 
-  requestAnimationFrame(renderGame);
+  // Displays who won/lost and reloads the page or continues to render the game
+  if (endGame) {
+    context.fillStyle = "rgba(0, 0, 0, 0.5)";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "#ffffff";
+    context.font = `26px 'Press Start 2P'`;
+    context.textAlign = "center";
+    context.fillText(`You ${endGame}!`, canvas.width / 2, 80);
+    setTimeout(() => {
+      endGame = null;
+      player.score = 0;
+      socket.emit("scored", player);
+      opponents.map((opponent) => {
+        opponent.score = 0;
+        socket.emit("scored", opponent);
+        return opponent;
+      });
+      requestAnimationFrame(renderGame);
+    }, 5000);
+  } else {
+    requestAnimationFrame(renderGame);
+  }
 }
 
 // Calls renderGame() on load
