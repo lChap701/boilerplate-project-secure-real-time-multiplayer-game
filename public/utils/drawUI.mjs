@@ -37,9 +37,4 @@ export default function drawUI(ctx, playerRank) {
   ctx.font = `13px 'Press Start 2P'`;
   ctx.textAlign = "end";
   ctx.fillText(playerRank, gameWidth - padding, infoTextPosY);
-
-  ctx.beginPath();
-  ctx.rect(padding, infoHeight, gameSize.width, gameSize.height);
-  ctx.stroke();
-  ctx.closePath();
 }
