@@ -31,19 +31,23 @@ class Player {
         this.y -= this.y - speed < 0 ? 0 : speed;
         break;
       case "down":
-        this.y +=
+        this.y =
           this.y + speed > gameSize.height - playerSprites.height
             ? gameSize.height - playerSprites.height
-            : speed;
+            : this.y + speed;
         break;
       case "left":
         this.x -= this.x - speed < 0 ? 0 : speed;
         break;
       case "right":
-        this.x +=
+        this.x =
           this.x + speed > gameSize.width - playerSprites.width
             ? gameSize.width - playerSprites.width
-            : speed;
+            : this.x + speed;
+        break;
+      default:
+        this.x = this.x;
+        this.y = this.y;
     }
   }
 
@@ -81,6 +85,10 @@ class Player {
    *
    */
   draw(context, sprite) {
+    if (this.dir) {
+      this.movePlayer(this.dir, this.speed);
+    }
+
     const x = this.x + gameOffsetLeft;
     const y = this.y + gameOffsetTop;
     context.drawImage(sprite, x, y, sprite.width, sprite.height);

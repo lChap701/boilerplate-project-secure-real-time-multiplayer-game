@@ -90,13 +90,22 @@ document.addEventListener("keydown", ({ key }) => {
       player.dir = null;
   }
 
-  player.movePlayer(player.dir, player.speed);
   socket.emit("movePlayer", player);
 });
 
 /* Stops the player from moving */
 document.addEventListener("keyup", ({ key }) => {
-  if (player && (key === "w" || key === "s" || key === "a" || key === "d")) {
+  if (
+    player &&
+    (key == "w" ||
+      key == "ArrowUp" ||
+      key === "s" ||
+      key == "ArrowDown" ||
+      key === "a" ||
+      key == "ArrowLeft" ||
+      key === "d" ||
+      key == "ArrowRight")
+  ) {
     player.dir = null;
     socket.emit("movePlayer", player);
   }
