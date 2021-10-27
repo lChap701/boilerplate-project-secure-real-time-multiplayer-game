@@ -62,7 +62,7 @@ let connectedPlayers = [];
 
 // Sets up the collectible
 let collectible = gameConfig.selectCollectible;
-const pos = startPos(gameConfig.gameSize, collectible);
+let pos = startPos(gameConfig.gameSize, collectible);
 let item = new Collectible({
   x: pos.x,
   y: pos.y,
@@ -119,15 +119,15 @@ io.on("connection", (socket) => {
       }
 
       // Get a new starting position
-      let newPos = startPos(gameConfig.gameSize, collectible);
-      while (newPos.x == item.x && newPos.y == item.y) {
-        newPos = startPos(gameConfig.gameSize, collectible);
+      pos = startPos(gameConfig.gameSize, collectible);
+      while (pos.x == item.x && pos.y == item.y) {
+        pos = startPos(gameConfig.gameSize, collectible);
       }
 
       // Send collectible to all clients
       item = new Collectible({
-        x: newPos.x,
-        y: newPos.y,
+        x: pos.x,
+        y: pos.y,
         src: collectible.src,
         value: collectible.points,
         id: nanoid(),
