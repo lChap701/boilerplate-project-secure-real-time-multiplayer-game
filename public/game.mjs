@@ -93,19 +93,16 @@ document.addEventListener("keydown", ({ key }) => {
 /* Stops the player from moving */
 document.addEventListener("keyup", ({ key }) => {
   if (
-    key != "w" &&
-    key != "ArrowUp" &&
-    key != "s" &&
-    key != "ArrowDown" &&
-    key != "a" &&
-    key != "ArrowLeft" &&
-    key != "d" &&
-    key != "ArrowRight"
+    player &&
+    (key == "w" ||
+      key == "ArrowUp" ||
+      key == "s" ||
+      key == "ArrowDown" ||
+      key == "a" ||
+      key == "ArrowLeft" ||
+      key == "d" ||
+      key == "ArrowRight")
   ) {
-    return;
-  }
-
-  if (player) {
     player.dir = null;
     socket.emit("movePlayer", player);
   }
