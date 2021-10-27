@@ -135,14 +135,10 @@ function renderGame() {
   drawUI(context, playerRank);
 
   // Draws collectible
-  if (curCollectible) {
-    curCollectible.draw(context, itemSprites);
-  }
+  if (curCollectible) curCollectible.draw(context, itemSprites);
 
   // Draws player's avatar
-  if (player) {
-    player.draw(context, playerAvatars[0]);
-  }
+  if (player) player.draw(context, playerAvatars[0]);
 
   // Draws each opponent's avatar
   for (const opponent of opponents) {
