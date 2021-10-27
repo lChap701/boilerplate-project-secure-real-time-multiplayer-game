@@ -61,9 +61,9 @@ app.use(function (req, res, next) {
 let connectedPlayers = [];
 
 // Gets a collectible
-const collectible = gameConfig.selectCollectible;
-const pos = startPos(gameConfig.gameSize, collectible);
-const item = new Collectible({
+let collectible = gameConfig.selectCollectible;
+let pos = startPos(gameConfig.gameSize, collectible);
+let item = new Collectible({
   x: pos.x,
   y: pos.y,
   src: collectible.src,
@@ -94,14 +94,6 @@ io.on("connection", (socket) => {
     socket.emit("getOpponents", connectedPlayers);
     socket.broadcast.emit("getOpponents", connectedPlayers);
 
-    // Updates the current player's score in the player array
-    socket.on("scored", (player) => {
-      let index = connectedPlayers.findIndex((p) => p.id == player.id);
-      connectedPlayers[index].score = player.score;
-      socket.emit("getRank", connectedPlayers);
-      socket.broadcast.emit("getRank", connectedPlayers);
-    });
-
     // Sends the correct rank to the client
     socket.on("requestRank", () => {
       console.log(connectedPlayers.length);
@@ -109,9 +101,27 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("getRank", connectedPlayers);
     });
 
-    socket.on("movePlayer", (player) => {});
+    // Moves the player across all sockets
+    socket.on("movePlayer", (player) => {
+      let index = connectedPlayers.findIndex((p) => p.id == player.id);
+      connectedPlayers[index].dir = player.dir;
+      connectedPlayers[index].x = player.x;
+      connectedPlayers[index].y = player.y;
+      socket.broadcast.emit("updateOpponent", player);
+    });
 
-    socket.on("playerCollideWithCollectible", (player) => {});
+    socket.on("playerCollideWithCollectible", () => {
+      socket.emit("updateScore", item.value);
+    });
+
+    // Updates the current player's score in the player array
+    socket.on("scored", (player) => {
+      let index = connectedPlayers.findIndex((p) => p.id == player.id);
+      connectedPlayers[index].score = player.score;
+      socket.emit("getRank", connectedPlayers);
+      socket.broadcast.emit("getRank", connectedPlayers);
+      socket.broadcast.emit("updateOpponent", player);
+    });
   });
 });
 

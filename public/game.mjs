@@ -42,20 +42,17 @@ socket.on("connect", () => {
 
 /* Gets new opponents */
 socket.on("getOpponents", (players) => {
-  players.filter((p) => p.id !== player.id).forEach((opponent) => {
-    opponents.push(new Player(opponent));
-  });
+  players
+    .filter((p) => p.id !== player.id)
+    .forEach((opponent) => {
+      opponents.push(new Player(opponent));
+    });
   socket.emit("requestRank");
 });
 
 /* Checks if collectible was taken and changes the current collectible */
 socket.on("setCollectible", (collectible) => {
-  if (curCollectible) {
-    player.score += curCollectible.value;
-    socket.emit("scored", player);
-    emitCollision = true;
-  }
-
+  if (curCollectible) emitCollision = true;
   curCollectible = new Collectible(collectible);
 });
 
@@ -87,8 +84,12 @@ document.addEventListener("keydown", ({ key }) => {
     case "d":
     case "ArrowRight":
       player.dir = "right";
+      break;
+    default:
+      player.dir = null;
   }
 
+  player.movePlayer(player.dir, player.speed);
   socket.emit("movePlayer", player);
 });
 
@@ -98,6 +99,19 @@ document.addEventListener("keyup", ({ key }) => {
     player.dir = null;
     socket.emit("movePlayer", player);
   }
+});
+
+socket.on("updateOpponent", (opponent) => {
+  let index = opponents.findIndex((op) => op.id == opponent.id);
+  opponents[index].dir = opponent.dir;
+  opponents[index].x = opponent.x;
+  opponents[index].y = opponent.y;
+  opponents[index].score = opponent.score;
+});
+
+socket.on("updateScore", (score) => {
+  player.score = score;
+  socket.emit("scored", player);
 });
 
 /**
@@ -135,7 +149,7 @@ function renderGame() {
     player.collision(curCollectible) &&
     emitCollision
   ) {
-    socket.emit("playerCollideWithCollectible", player);
+    socket.emit("playerCollideWithCollectible");
     emitCollision = false;
   }
 
