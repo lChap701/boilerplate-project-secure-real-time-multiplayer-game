@@ -86,7 +86,6 @@ document.addEventListener("keydown", ({ key }) => {
     case "ArrowRight":
       player.dir = "right";
   }
-
   socket.emit("movePlayer", player);
 });
 
@@ -119,7 +118,8 @@ socket.on("updateOpponent", (opponent) => {
 
 /* Upates the player score */
 socket.on("updateScore", (score) => {
-  player.score = score;
+  player.score += score;
+  console.log(player.score);
   socket.emit("scored", player);
 });
 
