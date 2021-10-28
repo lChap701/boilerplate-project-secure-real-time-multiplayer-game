@@ -13,7 +13,8 @@ const context = canvas.getContext("2d");
 const { playerSprites, collectibleSprites } = gameConfig;
 let player;
 let curCollectible;
-let playerRank = "Rank: 0 / 0";
+let rank = "Rank: 0 / 0";
+let score = "Score: 0 / 500";
 let opponents = [];
 let emitCollision = true;
 let endGame;
@@ -59,7 +60,7 @@ socket.on("setCollectible", (collectible) => {
 
 /* Gets the current rank of the player */
 socket.on("getRank", (players) => {
-  playerRank = player.calculateRank(players);
+  rank = player.calculateRank(players);
 });
 
 /* Updates the opponents array when an opponent leaves the game */
@@ -70,6 +71,8 @@ socket.on("opponentLeft", (id) => {
 
 /* Allows the player to move */
 document.addEventListener("keydown", ({ key }) => {
+  if (endGame) return;
+
   switch (key) {
     case "w":
     case "ArrowUp":
@@ -94,6 +97,7 @@ document.addEventListener("keydown", ({ key }) => {
 document.addEventListener("keyup", ({ key }) => {
   if (
     player &&
+    !endGame &&
     (key == "w" ||
       key == "ArrowUp" ||
       key == "s" ||
@@ -118,22 +122,48 @@ socket.on("updateOpponent", (opponent) => {
 });
 
 /* Upates the player score */
-socket.on("updateScore", (score) => {
-  player.score += score;
-  console.log(player.score);
+socket.on("updateScore", (pts) => {
+  player.score += pts;
+  score = `Score: ${player.score} / 500`;
   socket.emit("scored", player);
 });
 
-/* Ends the game and shows the player that they won */
-socket.on("winner", () => (endGame = "win"));
+/* Ends the game and finds who won */
+socket.on("findWinner", () => {
+  if (rank.includes("1 /")) {
+    endGame = "win";
+  } else {
+    endGame = "lose";
+  }
+});
 
-/* Ends the game and shows the player that they lost */
-socket.on("loser", () => (endGame = "lose"));
+/* Starts a new game */
+socket.on("resetGame", () => {
+  endGame = null;
+  socket.emit("getPlayerPos");
+  requestAnimationFrame(renderGame);
+});
+
+/* Resets the game for the player */
+socket.on("resetPlayer", (pos) => {
+  player = new Player({ x: pos.x, y: pos.y, id: socket.id });
+  score = "Score: 0 / 500";
+  socket.emit("movePlayer", player);
+  socket.emit("scored", player);
+});
+
+socket.on("resetOpponents", (pos) => {
+  opponents.map((opponent) => {
+    opponent = new Player({ x: pos.x, y: pos.y, id: socket.id });
+    socket.emit("updateOpponent", opponent);
+    return opponent;
+  });
+});
 
 /**
  * Draws sprites and creates the canavas for the game
  * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/game.mjs
- * 
+ *
  */
 function renderGame() {
   canvas.style.background = "#080";
@@ -141,7 +171,7 @@ function renderGame() {
   context.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draws game UI
-  drawUI(context, playerRank);
+  drawUI(context, score, rank);
 
   // Draws collectible
   if (curCollectible && !endGame) curCollectible.draw(context, itemSprites);
@@ -170,23 +200,15 @@ function renderGame() {
 
   // Displays who won/lost and reloads the page or continues to render the game
   if (endGame) {
+    // Overlay
     context.fillStyle = "rgba(0, 0, 0, 0.5)";
     context.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Result text
     context.fillStyle = "#ffffff";
     context.font = `26px 'Press Start 2P'`;
     context.textAlign = "center";
-    context.fillText(`You ${endGame}!`, canvas.width / 2, 80);
-    setTimeout(() => {
-      endGame = null;
-      player.score = 0;
-      socket.emit("scored", player);
-      opponents.map((opponent) => {
-        opponent.score = 0;
-        socket.emit("scored", opponent);
-        return opponent;
-      });
-      requestAnimationFrame(renderGame);
-    }, 5000);
+    context.fillText(`You ${endGame}!`, canvas.width / 2, canvas.height / 2);
   } else {
     requestAnimationFrame(renderGame);
   }
