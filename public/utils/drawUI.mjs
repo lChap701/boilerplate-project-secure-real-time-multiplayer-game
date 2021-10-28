@@ -8,8 +8,8 @@ const { title, controls, gameWidth, padding, infoHeight, gameSize } =
  * @module ./public/utils/drawUI
  * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/drawUI.mjs
  *
- * @param ctx             Used for rendering
- * @param playerRank      Represents the player's rank
+ * @param ctx           Used for rendering
+ * @param playerRank    Represents the player's rank
  *
  */
 export default function drawUI(ctx, playerRank) {
