@@ -25,17 +25,17 @@ export default function drawUI(ctx, playerRank) {
 
   // Game controls
   ctx.fillStyle = "#ffffff";
-  ctx.font = `13px 'Press Start 2P'`;
+  ctx.font = `12px 'Press Start 2P'`;
   ctx.textAlign = "start";
   ctx.fillText(controls, padding, infoTextPosY);
 
   // Game title
-  ctx.font = `15px 'Press Start 2P'`;
+  ctx.font = `14px 'Press Start 2P'`;
   ctx.textAlign = "center";
   ctx.fillText(title, gameWidth / 2, infoTextPosY);
 
   // Player's rank
-  ctx.font = `13px 'Press Start 2P'`;
+  ctx.font = `12px 'Press Start 2P'`;
   ctx.textAlign = "end";
   ctx.fillText(playerRank, gameWidth - padding, infoTextPosY);
 }
