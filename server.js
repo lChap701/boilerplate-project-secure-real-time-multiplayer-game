@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const expect = require("chai");
+const cors = require("cors");
 const nanoid = require("nanoid").nanoid;
 
 const fccTestingRoutes = require("./routes/fcctesting.js");
@@ -37,6 +38,9 @@ app.use(
 // Prevents caching
 const nocache = require("nocache");
 app.use(nocache());
+
+// For FCC
+app.use(cors({ origin: "*" }));
 
 app.use("/public", express.static(process.cwd() + "/public"));
 app.use("/assets", express.static(process.cwd() + "/assets"));
