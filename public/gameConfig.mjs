@@ -10,7 +10,7 @@ const gameConfig = {
   gameWidth: 952,
   gameHeight: 488,
   padding: 10,
-  infoHeight: 40,
+  infoHeight: 60,
   get gameSize() {
     return {
       width: this.gameWidth - 2 * this.padding,
