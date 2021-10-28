@@ -128,6 +128,7 @@ socket.on("updateScore", (pts) => {
   socket.emit("scored", player);
 });
 
+/* Plays the sound effect */
 socket.on("playSoundEffect", () => {
   let bark = new Audio(gameConfig.soundEffect.src);
   bark.play();
