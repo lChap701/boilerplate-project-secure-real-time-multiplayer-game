@@ -19,6 +19,9 @@ let opponents = [];
 let emitCollision = true;
 let endGame;
 
+/* Pre-load sound effect */
+const bark = new Audio(gameConfig.soundEffect.src);
+
 /* Sets the size of the canvas */
 canvas.width = gameConfig.gameWidth;
 canvas.height = gameConfig.gameHeight;
@@ -130,7 +133,6 @@ socket.on("updateScore", (pts) => {
 
 /* Plays the sound effect */
 socket.on("playSoundEffect", () => {
-  let bark = new Audio(gameConfig.soundEffect.src);
   bark.play();
 });
 
