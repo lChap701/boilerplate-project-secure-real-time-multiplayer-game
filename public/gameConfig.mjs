@@ -23,8 +23,8 @@ const gameConfig = {
   },
   collectibleSprites: {
     ball: {
-      width: 15,
-      height: 15,
+      width: 20,
+      height: 20,
       src: "/assets/Ball.png",
       points: 5,
     },

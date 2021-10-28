@@ -131,7 +131,8 @@ socket.on("winner", () => (endGame = "win"));
 socket.on("loser", () => (endGame = "lose"));
 
 /**
- * Draws sprites and creates the canavas for the ame
+ * Draws sprites and creates the canavas for the game
+ * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/game.mjs
  */
 function renderGame() {
   canvas.style.background = "#080";
