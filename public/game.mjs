@@ -144,7 +144,7 @@ socket.on("resetGame", () => {
   requestAnimationFrame(renderGame);
 });
 
-/* Resets the game for the player */
+/* Resets the game for the client */
 socket.on("resetPlayer", (pos) => {
   player = new Player({ x: pos.x, y: pos.y, id: socket.id });
   score = "Score: 0 / 500";
@@ -152,6 +152,7 @@ socket.on("resetPlayer", (pos) => {
   socket.emit("scored", player);
 });
 
+/* Resets the game for the other clients */
 socket.on("resetOpponents", (pos) => {
   opponents.map((opponent) => {
     opponent = new Player({ x: pos.x, y: pos.y, id: socket.id });
