@@ -121,11 +121,16 @@ socket.on("updateOpponent", (opponent) => {
   opponents[index].score = opponent.score;
 });
 
-/* Upates the player score */
+/* Updates the player score */
 socket.on("updateScore", (pts) => {
   player.score += pts;
   score = `Score: ${player.score} / 500`;
   socket.emit("scored", player);
+});
+
+socket.on("playSoundEffect", () => {
+  let bark = new Audio(gameConfig.soundEffect.src);
+  bark.play();
 });
 
 /* Ends the game and finds who won */

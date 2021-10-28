@@ -5,3 +5,4 @@ An online multiplayer game where you play as a dog and try to collect balls, bon
 ## Resources
 
 [Inspiration](https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game)
+[Sound Effect](https://www.freesoundeffects.com/free-track/bark-89451/)

@@ -138,6 +138,11 @@ io.on("connection", (socket) => {
     socket.on("scored", (player) => {
       let index = connectedPlayers.findIndex((p) => p.id == player.id);
       connectedPlayers[index].score = player.score;
+
+      // Prevents sound effect from being played when game restarts
+      if (player.score > 0) io.sockets.emit("playSoundEffect");
+
+      // Updates clients
       io.sockets.emit("getRank", connectedPlayers);
       socket.broadcast.emit("updateOpponent", player);
 
