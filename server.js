@@ -95,7 +95,6 @@ io.on("connection", (socket) => {
 
     // Sends the correct rank to all clients
     socket.on("requestRank", () => {
-      console.log(connectedPlayers.length);
       io.sockets.emit("getRank", connectedPlayers);
     });
 
@@ -124,7 +123,7 @@ io.on("connection", (socket) => {
         pos = startPos(gameConfig.gameSize, collectible);
       }
 
-      // Send collectible to all clients
+      // Sends new collectible to all clients
       item = new Collectible({
         x: pos.x,
         y: pos.y,
@@ -135,7 +134,7 @@ io.on("connection", (socket) => {
       io.sockets.emit("setCollectible", item);
     });
 
-    // Updates a player's score for all clients
+    // Updates a player's score on all clients
     socket.on("scored", (player) => {
       let index = connectedPlayers.findIndex((p) => p.id == player.id);
       connectedPlayers[index].score = player.score;
@@ -145,9 +144,25 @@ io.on("connection", (socket) => {
 
       // Ends the game once a player has a score of at least 500 points
       if (player.score >= 500) {
-        socket.emit("winner");
-        socket.broadcast.emit("loser");
+        io.sockets.emit("findWinner");
+
+        // Resets the game on all clients
+        setTimeout(() => {
+          io.sockets.emit("resetGame");
+        }, 5000);
       }
+    });
+
+    // Gets a new starting position for all players
+    socket.on("getPlayerPos", () => {
+      socket.emit(
+        "resetPlayer",
+        startPos(gameConfig.gameSize, gameConfig.playerSprites)
+      );
+      socket.broadcast.emit(
+        "resetOpponents",
+        startPos(gameConfig.gameSize, gameConfig.playerSprites)
+      );
     });
   });
 });
