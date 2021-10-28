@@ -1,8 +1,9 @@
 /**
  * Module that adds shadows to all sprites
  * @module ./public/utils/shadows
+ * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/utils/drawDropShadow.mjs
  *
- * @param context     Represents the sprites ono the canvas
+ * @param context     Represents the sprites on the canvas
  *
  */
 export default function shadows(context) {

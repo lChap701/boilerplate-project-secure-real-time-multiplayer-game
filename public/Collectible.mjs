@@ -6,9 +6,15 @@ const gameOffsetLeft = gameConfig.padding;
 /**
  * Module for creating items and keeping track of them
  * @module ./public/Collectible
+ * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/Collectible.mjs
  *
  */
 class Collectible {
+  /**
+   * Constructor for the Collectible class
+   * @param param0    Represents the properties of a collectible object
+   *
+   */
   constructor({ x, y, value = 1, id, src = "" }) {
     this.x = x;
     this.y = y;

@@ -1,6 +1,7 @@
 /**
  * Module for getting the starting position for a sprite
  * @module ./public/utils/startPos
+ * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/utils/generateStartPos.mjs
  *
  * @param gameField   Represents the size of the game
  * @param sprite      Represents the sprite

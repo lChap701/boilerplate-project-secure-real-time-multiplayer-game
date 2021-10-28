@@ -6,6 +6,7 @@ const { title, controls, gameWidth, padding, infoHeight, gameSize } =
 /**
  * Draws the UI for the game
  * @module ./public/utils/drawUI
+ * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/drawUI.mjs
  *
  * @param ctx             Used for rendering
  * @param playerRank      Represents the player's rank

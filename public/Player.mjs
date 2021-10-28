@@ -7,9 +7,15 @@ const gameOffsetLeft = gameConfig.padding;
 /**
  * Module for creating player objects and keeping track of them
  * @module ./public/Player
- *
+ * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/Player.mjs
+ * 
  */
 class Player {
+  /**
+   * Constructor for the Player class
+   * @param param0    Represents the properties of a player object
+   *
+   */
   constructor({ x, y, score = 0, id }) {
     this.x = x;
     this.y = y;
@@ -44,15 +50,11 @@ class Player {
           this.x + speed > gameSize.width - playerSprites.width
             ? gameSize.width - playerSprites.width
             : this.x + speed;
-        break;
-      default:
-        this.x = this.x;
-        this.y = this.y;
     }
   }
 
   /**
-   * Allows the player to collect items and allows boundries to be set
+   * Allows the player to collect items
    * @param item    Represents the item that the player touched
    * @returns       Returns a boolean value to indicate if the item was collected
    */
@@ -60,6 +62,7 @@ class Player {
     let itemWidth;
     let itemHeight;
 
+    // Gets the width and height of the collectible
     Object.keys(collectibleSprites).forEach((key) => {
       if (collectibleSprites[key].src == item.src) {
         itemWidth = collectibleSprites[key].width;

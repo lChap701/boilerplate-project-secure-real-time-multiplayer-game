@@ -1,7 +1,8 @@
 /**
  * Module that is used to configure the game
  * @module ./public/gameConfig
- *
+ * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/gameConfig.mjs
+ * 
  */
 const gameConfig = {
   title: "Dog Days",
