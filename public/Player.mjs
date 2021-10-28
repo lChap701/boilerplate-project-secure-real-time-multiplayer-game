@@ -8,7 +8,7 @@ const gameOffsetLeft = gameConfig.padding;
  * Module for creating player objects and keeping track of them
  * @module ./public/Player
  * @see https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game/blob/main/public/Player.mjs
- * 
+ *
  */
 class Player {
   /**
