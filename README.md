@@ -4,4 +4,4 @@ An online multiplayer game where you play as a dog and try to collect tennis bal
 
 ## Resources
 
-[https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game](Inspiration)
+[Inspiration](https://github.com/pinglu85/fcc-secure-real-time-multiplayer-game)
