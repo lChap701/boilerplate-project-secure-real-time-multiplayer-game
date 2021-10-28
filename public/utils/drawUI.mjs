@@ -32,12 +32,12 @@ export default function drawUI(context, score, rank) {
   // Game controls
   context.font = `12px 'Press Start 2P'`;
   context.textAlign = "start";
-  context.fillText(controls, padding, infoHeight - padding);
+  context.fillText(score, padding, infoHeight - padding);
 
   // Player's score
   context.font = `12px 'Press Start 2P'`;
   context.textAlign = "center";
-  context.fillText(score, gameWidth / 2, infoHeight - padding);
+  context.fillText(controls, gameWidth / 2, infoHeight - padding);
 
   // Player's rank
   context.font = `12px 'Press Start 2P'`;
